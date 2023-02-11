@@ -1,0 +1,47 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Objects/Object.gd" type="Script" id=1]
+[ext_resource path="res://music/object destroyed.wav" type="AudioStream" id=2]
+[ext_resource path="res://interaction/Hurtbox.tscn" type="PackedScene" id=3]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.376471, 0.376471, 0.376471, 1 )
+border_color = Color( 1, 1, 1, 0 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.862745, 0.0470588, 0.0470588, 0.890196 )
+border_color = Color( 0.8, 0.8, 0.8, 0 )
+
+[sub_resource type="Theme" id=3]
+ProgressBar/styles/bg = SubResource( 1 )
+ProgressBar/styles/fg = SubResource( 2 )
+
+[node name="Object" type="StaticBody2D"]
+script = ExtResource( 1 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 0.7, 0.7 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="Hurtbox" parent="." instance=ExtResource( 3 )]
+collision_layer = 8
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+margin_left = -48.0
+margin_top = 24.0
+margin_right = 48.0
+margin_bottom = 32.0
+theme = SubResource( 3 )
+percent_visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DestroyedSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 2 )
+
+[connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
+[connection signal="finished" from="DestroyedSound" to="." method="_on_DestroyedSound_finished"]
+
+[editable path="Hurtbox"]
